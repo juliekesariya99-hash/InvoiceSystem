@@ -1,0 +1,308 @@
+{% extends 'billing/base.html' %}
+
+{% block content %}
+
+
+<div class="mb-5">
+    <h1 class="page-title" style="font-size: 2.5rem;">
+        <i class="bi bi-speedometer2"></i> Dashboard
+    </h1>
+    <p class="text-muted">Welcome to your Invoice Management System</p>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row g-4 mb-5">
+    <!-- Total Customers Card -->
+    <div class="col-lg-3 col-md-6">
+        <a href="/admin/billing/customer/" class="text-decoration-none">
+            <div class="card border-0 h-100 card-clickable">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted small fw-bold mb-1">
+                                <i class="bi bi-people"></i> TOTAL CUSTOMERS
+                            </p>
+                            <h2 class="mb-0 text-primary fw-bold">{{ total_customers }}</h2>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-people text-primary" style="font-size: 1.5rem;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-top">
+                    <small class="text-muted">Total registered customers</small>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Total Products Card -->
+    <div class="col-lg-3 col-md-6">
+        <a href="/admin/billing/product/" class="text-decoration-none">
+            <div class="card border-0 h-100 card-clickable">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted small fw-bold mb-1">
+                                <i class="bi bi-box"></i> TOTAL PRODUCTS
+                            </p>
+                            <h2 class="mb-0 text-success fw-bold">{{ total_products }}</h2>
+                        </div>
+                        <div class="bg-success bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-box text-success" style="font-size: 1.5rem;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-top">
+                    <small class="text-muted">Products in inventory</small>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Total Invoices Card -->
+    <div class="col-lg-3 col-md-6">
+        <a href="{% url 'create_invoice' %}" class="text-decoration-none">
+            <div class="card border-0 h-100 card-clickable">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted small fw-bold mb-1">
+                                <i class="bi bi-receipt"></i> TOTAL INVOICES
+                            </p>
+                            <h2 class="mb-0 text-warning fw-bold">{{ total_invoices }}</h2>
+                        </div>
+                        <div class="bg-warning bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-receipt text-warning" style="font-size: 1.5rem;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-top">
+                    <small class="text-muted">Invoices generated</small>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Total Revenue Card -->
+    <div class="col-lg-3 col-md-6">
+        <a href="/admin/billing/invoice/" class="text-decoration-none">
+            <div class="card border-0 h-100 card-clickable">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted small fw-bold mb-1">
+                                <i class="bi bi-currency-rupee"></i> TOTAL REVENUE
+                            </p>
+                            <h2 class="mb-0 text-danger fw-bold">₹{{ total_revenue }}</h2>
+                        </div>
+                        <div class="bg-danger bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-currency-rupee text-danger" style="font-size: 1.5rem;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-top">
+                    <small class="text-muted">Total revenue generated</small>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card border-0 h-100">
+            <div class="card-body p-4 text-center py-5">
+                <i class="bi bi-plus-circle text-primary" style="font-size: 3rem;"></i>
+                <h5 class="mt-3 mb-3">Create New Invoice</h5>
+                <p class="text-muted mb-4">Generate a new invoice for your customers</p>
+                <a href="{% url 'create_invoice' %}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-file-earmark-plus"></i> Go to Create Invoice
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card border-0 h-100">
+            <div class="card-body p-4 text-center py-5">
+                <i class="bi bi-tools text-success" style="font-size: 3rem;"></i>
+                <h5 class="mt-3 mb-3">Admin Panel</h5>
+                <p class="text-muted mb-4">Manage customers and products</p>
+                <a href="/admin/" class="btn btn-success btn-lg">
+                    <i class="bi bi-gear"></i> Go to Admin Panel
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Revenue Analytics Chart -->
+<div class="row g-4 mt-5">
+    <div class="col-12">
+        <div class="analytics-card">
+            <div class="analytics-title">
+                <i class="bi bi-graph-up"></i>
+                Revenue Analytics
+            </div>
+        </div>
+        <div class="analytics-content">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="ps-3 border-start">
+                        <h6 class="text-muted mb-3 fw-bold">Key Metrics</h6>
+                        <div class="mb-3">
+                            <p class="text-muted small mb-1">Total Revenue</p>
+                            <h5 class="text-danger fw-bold">₹{{ total_revenue }}</h5>
+                        </div>
+                        <div class="mb-3">
+                            <p class="text-muted small mb-1">Total Invoices</p>
+                            <h5 class="text-warning fw-bold">{{ total_invoices }}</h5>
+                        </div>
+                        <div>
+                            <p class="text-muted small mb-1">Business Performance</p>
+                            <p class="text-success fw-bold"><span class="badge bg-success">On Track</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Summary -->
+<div class="row g-4 mt-5">
+    <div class="col-12">
+        <div class="card border-0">
+            <div class="card-header bg-light py-3">
+                <h6 class="mb-0 text-primary fw-bold">
+                    <i class="bi bi-graph-up"></i> System Summary
+                </h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="row text-center">
+                    <div class="col-md-3 py-3 border-end">
+                        <p class="text-muted small mb-1">Average Revenue per Invoice</p>
+                        <h4 class="text-primary fw-bold">
+                            ₹{% if total_invoices %}{{ total_revenue|add:0|floatformat:2 }}{% else %}0{% endif %}
+                        </h4>
+                    </div>
+                    <div class="col-md-3 py-3 border-end">
+                        <p class="text-muted small mb-1">Invoices per Customer</p>
+                        <h4 class="text-success fw-bold">
+                            {% if total_customers %}{{ total_invoices|add:0|floatformat:1 }}{% else %}0{% endif %}
+                        </h4>
+                    </div>
+                    <div class="col-md-3 py-3 border-end">
+                        <p class="text-muted small mb-1">Invoices per Product</p>
+                        <h4 class="text-warning fw-bold">
+                            {% if total_products %}{{ total_invoices|add:0|floatformat:1 }}{% else %}0{% endif %}
+                        </h4>
+                    </div>
+                    <div class="col-md-3 py-3">
+                        <p class="text-muted small mb-1">System Status</p>
+                        <h4 class="text-danger fw-bold">
+                            <span class="badge bg-success">Active</span>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    const revenueChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Revenue', 'Invoices', 'Customers', 'Products'],
+            datasets: [{
+                label: 'Business Metrics',
+                data: [{{ total_revenue }}, {{ total_invoices }}, {{ total_customers }}, {{ total_products }}],
+                backgroundColor: [
+                    'rgba(220, 53, 69, 0.8)',
+                    'rgba(255, 193, 7, 0.8)',
+                    'rgba(13, 110, 253, 0.8)',
+                    'rgba(40, 167, 69, 0.8)'
+                ],
+                borderColor: [
+                    'rgba(220, 53, 69, 1)',
+                    'rgba(255, 193, 7, 1)',
+                    'rgba(13, 110, 253, 1)',
+                    'rgba(40, 167, 69, 1)'
+                ],
+                borderWidth: 2,
+                borderRadius: 6,
+                hoverBackgroundColor: [
+                    'rgba(220, 53, 69, 1)',
+                    'rgba(255, 193, 7, 1)',
+                    'rgba(13, 110, 253, 1)',
+                    'rgba(40, 167, 69, 1)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    labels: {
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        padding: 20,
+                        color: '#666'
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    padding: 12,
+                    titleFont: {
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
+                    borderColor: '#ddd',
+                    borderWidth: 1
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0,0,0,0.05)'
+                    },
+                    ticks: {
+                        color: '#666',
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: '#666',
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

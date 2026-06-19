@@ -1,0 +1,97 @@
+{% extends 'billing/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-6">
+        <h1 class="page-title"><i class="bi bi-file-earmark-plus"></i> Create Invoice</h1>
+        
+        <div class="card">
+            <div class="card-body p-4">
+                <form method="POST" class="needs-validation">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="customer" class="form-label fw-bold">
+                            <i class="bi bi-person"></i> Customer
+                        </label>
+                        <select class="form-select" id="customer" name="customer" required>
+                            <option value="">-- Select a customer --</option>
+                            {% for customer in customers %}
+                                <option value="{{ customer.id }}">{{ customer.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="product" class="form-label fw-bold">
+                            <i class="bi bi-box"></i> Product
+                        </label>
+                        <select class="form-select" id="product" name="product" required>
+                            <option value="">-- Select a product --</option>
+                            {% for product in products %}
+                                <option value="{{ product.id }}">{{ product.name }} - ₹{{ product.price }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label fw-bold">
+                            <i class="bi bi-calculator"></i> Quantity
+                        </label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" value="1" min="1" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-2">
+                        <i class="bi bi-check-circle"></i> Create Invoice
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <h1 class="page-title"><i class="bi bi-list-ul"></i> Recent Invoices</h1>
+        
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th><i class="bi bi-hash"></i> ID</th>
+                            <th><i class="bi bi-person"></i> Customer</th>
+                            <th><i class="bi bi-currency-rupee"></i> Total</th>
+                            <th><i class="bi bi-gear"></i> Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for invoice in invoices %}
+                        <tr>
+                            <td>
+                                <span class="badge bg-primary">#{{ invoice.id }}</span>
+                            </td>
+                            <td>{{ invoice.customer.name }}</td>
+                            <td class="fw-bold">₹{{ invoice.total_amount }}</td>
+                            <td>
+                                <a href="{% url 'invoice_detail' invoice.id %}" class="btn btn-sm btn-info">
+                                    <i class="bi bi-eye"></i> View
+                                </a>
+                                <a href="{% url 'invoice_pdf' invoice.id %}" class="btn btn-sm btn-success">
+                                    <i class="bi bi-file-pdf"></i> PDF
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">
+                                <i class="bi bi-inbox" style="font-size: 2rem;"></i>
+                                <p>No invoices yet. Create one above!</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

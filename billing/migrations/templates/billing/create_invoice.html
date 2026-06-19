@@ -1,0 +1,34 @@
+{% if message %}
+<h3 style="color:green;">{{ message }}</h3>
+{% endif %}
+
+<h1>Create Invoice</h1>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label>Customer:</label>
+    <select name="customer">
+        {% for customer in customers %}
+            <option value="{{ customer.id }}">{{ customer.name }}</option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+
+    <label>Product:</label>
+    <select name="product">
+        {% for product in products %}
+            <option value="{{ product.id }}">{{ product.name }} - {{ product.price }}</option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+
+    <label>Quantity:</label>
+    <input type="number" name="quantity" value="1">
+
+    <br><br>
+
+    <button type="submit">Create Invoice</button>
+</form>

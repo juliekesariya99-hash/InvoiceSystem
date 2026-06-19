@@ -1,0 +1,79 @@
+{% extends 'billing/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white py-4">
+                <h1 class="mb-0" style="color: white; font-size: 2rem;">
+                    <i class="bi bi-receipt"></i> Invoice #{{ invoice.id }}
+                </h1>
+            </div>
+            
+            <div class="card-body p-5">
+                <!-- Invoice Meta -->
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <h6 class="text-muted fw-bold mb-2">BILL TO</h6>
+                        <p class="mb-0 fs-5"><strong>{{ invoice.customer.name }}</strong></p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <h6 class="text-muted fw-bold mb-2">DATE</h6>
+                        <p class="mb-0 fs-5">{{ invoice.date|date:"F d, Y" }}</p>
+                    </div>
+                </div>
+
+                <!-- Items Table -->
+                <div class="table-responsive mb-4">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr class="border-bottom-2">
+                                <th>Product</th>
+                                <th class="text-end">Price</th>
+                                <th class="text-center">Qty</th>
+                                <th class="text-end">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                            <tr>
+                                <td><strong>{{ item.product.name }}</strong></td>
+                                <td class="text-end">₹{{ item.price }}</td>
+                                <td class="text-center">{{ item.quantity }}</td>
+                                <td class="text-end"><strong>₹{{ item.line_total }}</strong></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-muted">No items in this invoice</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Total -->
+                <div class="row justify-content-end mb-5">
+                    <div class="col-md-4">
+                        <div class="bg-light p-4 rounded border-top border-3 border-primary">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Total Amount:</h5>
+                                <h4 class="mb-0 text-primary"><strong>₹{{ invoice.total_amount }}</strong></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="d-flex gap-2">
+                    <a href="{% url 'invoice_pdf' invoice.id %}" class="btn btn-success">
+                        <i class="bi bi-file-pdf"></i> Download PDF
+                    </a>
+                    <a href="{% url 'create_invoice' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-left"></i> Back to Invoices
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
